@@ -2,12 +2,25 @@
 
 namespace app\controllers;
 
+use Yii;
+
 class PostController extends \yii\web\Controller
 {
     public function actionCreate()
-    {
-        return $this->render('create');
+{
+    $post = new \app\models\Post();
+
+    if ($post->load(Yii::$app->request->post())) {
+        if ($post->validate()) {
+            $post->save();
+            return $this->redirect('/');
+        }
     }
+
+    return $this->render('create', [
+        'post' => $post,
+    ]);
+}
 
     public function actionDelete($id)
     {

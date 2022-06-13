@@ -67,4 +67,9 @@ class Post extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
+
+    public function beforeSave($insert)
+    {
+        return parent::beforeSave($insert);
+    }
 }
