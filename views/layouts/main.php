@@ -31,7 +31,7 @@ AppAsset::register($this);
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
+            'class' => 'navbar navbar-expand-md navbar-light bg-light fixed-top',
         ],
     ]);
     echo Nav::widget([
@@ -42,23 +42,23 @@ AppAsset::register($this);
             
         ],
     ]);
+    
 
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav ml-auto'],
-        'items' => [
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
+        'items' => Yii::$app->user->isGuest ? ([
+            ['label' => 'Login', 'url' => ['/user/login']],
+            ['label' => 'Register', 'url' => ['/user/register']]
+        ]) : (
+            '<li>'
+            . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
+            . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->username . ')',
+                ['class' => 'btn btn-link logout']
             )
-        ]
+            . Html::endForm()
+            . '</li>'
+        )
     ]);
     NavBar::end();
     ?>

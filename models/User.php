@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use parent;
 
 /**
  * This is the model class for table "tbl_user".
@@ -30,7 +29,7 @@ class User extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tbl_user';
+        return '{{%user}}';
     }
 
     /**
