@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\web\Response;
 use app\models\LoginForm;
+use app\models\User;
 
 class UserController extends \yii\web\Controller
 {
@@ -43,8 +44,18 @@ class UserController extends \yii\web\Controller
     }
 
     public function actionRegister()
-    {
-        return $this->render('register');
+{
+    $user = new User();
+
+    if ($user->load(Yii::$app->request->post())) {
+        if ($user->validate()) {
+            return $this->redirect('/');
+        }
     }
+
+    return $this->render('register', [
+        'user' => $user,
+    ]);
+}
 
 }
