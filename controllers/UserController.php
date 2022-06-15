@@ -49,6 +49,7 @@ class UserController extends \yii\web\Controller
 
     if ($user->load(Yii::$app->request->post())) {
         if ($user->validate()) {
+            $user->save();
             return $this->redirect('/');
         }
     }

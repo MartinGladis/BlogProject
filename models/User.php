@@ -49,6 +49,7 @@ class User extends \yii\db\ActiveRecord
             [['postcode'], 'string', 'max' => 6],
             [['pesel'], 'string', 'max' => 11],
             [['username', 'email'], 'trim'],
+            [['username', 'email'], 'unique'],
             ['username', 'validateUsername'],
             ['email', 'email'],
             ['birthdate', 'validateDate'],
@@ -98,20 +99,20 @@ class User extends \yii\db\ActiveRecord
         $username = $this->username;
 
         $regex = '/\s+/';
-        if (preg_match($regex, $username)) {
+        if (!preg_match($regex, $username)) {
             $regex = '/[a-zA-z\d]{6,}/';
             if (!preg_match($regex, $username)) {
-                $this->addError($attribute, "Username shouldn't have white spaces");
+                $this->addError($attribute, "Username should contain only uppercase and lowercase letters and be at least 6 characters long");
             }
         } else {
-            $this->addError($attribute, "Username  should contain only uppercase and lowercase letters and be at least 6 characters long");
+            $this->addError($attribute, "Username shouldn't have white spaces");
         }
     }
 
     public function validateDate($attribute)
     {
         $date = $this->birthdate;
-        $regex = '/[\d]{2}.[\d]{2}.[\d]{2}/';
+        $regex = '/[\d]{2}.[\d]{2}.[\d]{4}/';
 
         if (preg_match($regex, $date)) {
             $day = intval(substr($date, 0, 2));
@@ -225,6 +226,11 @@ class User extends \yii\db\ActiveRecord
     {
         if ($this->password) {
             $this->password = md5($this->password);
+        }
+
+        if ($this->birthdate) {
+            $this->birthdate = Yii::$app->formatter
+                ->asDatetime($this->birthdate, "php:Y-m-d");
         }
 
         return parent::beforeSave($insert);
