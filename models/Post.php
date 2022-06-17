@@ -19,6 +19,9 @@ use Yii;
  */
 class Post extends \yii\db\ActiveRecord
 {
+
+    public $attachmentFiles;
+
     /**
      * {@inheritdoc}
      */
@@ -37,7 +40,8 @@ class Post extends \yii\db\ActiveRecord
             [['description'], 'string'],
             [['user_id'], 'integer'],
             [['create_at', 'update_at'], 'safe'],
-            [['topic', 'attachment'], 'string', 'max' => 255],
+            [['topic'], 'string', 'max' => 255],
+            ['attachmentFiles', 'file', 'maxFiles' => 10],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -52,9 +56,9 @@ class Post extends \yii\db\ActiveRecord
             'topic' => 'Topic',
             'description' => 'Description',
             'user_id' => 'User ID',
-            'attachment' => 'Attachment',
             'create_at' => 'Create At',
             'update_at' => 'Update At',
+            'attachmentFiles' => 'Attachments',
         ];
     }
 
@@ -68,8 +72,8 @@ class Post extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
-    public function beforeSave($insert)
+    public function getFiles()
     {
-        return parent::beforeSave($insert);
+        return $this->hasMany(File::class, ['post_id' => 'id']);
     }
 }
