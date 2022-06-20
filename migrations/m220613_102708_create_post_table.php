@@ -14,7 +14,6 @@ class m220613_102708_create_post_table extends Migration
     {
         $this->createTable('{{%post}}', [
             'id' => $this->primaryKey(),
-            'uuid' => $this->string(255)->unique(),
             'topic' => $this->string(255)->notNull(),
             'description' => $this->text()->notNull(),
             'user_id' => $this->integer(),

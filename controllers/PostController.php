@@ -33,6 +33,7 @@ class PostController extends \yii\web\Controller
                     
                     $file->filename = $filename;
                     $file->post_id = $post->id;
+                    $file->path = $path;
                     $file->mime_type = FileHelper::getMimeType($attachmentFile);
                     $file->save();
                 }
