@@ -76,4 +76,13 @@ class Post extends \yii\db\ActiveRecord
     {
         return $this->hasMany(File::class, ['post_id' => 'id']);
     }
+
+    public function beforeSave($insert)
+    {
+        if (yii::$app->user->id) {
+            $this->user_id = yii::$app->user->id;
+        }
+
+        return parent::beforeSave($insert);
+    }
 }
