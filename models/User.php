@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\VarDumper;
+use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "tbl_user".
@@ -13,6 +15,7 @@ use yii\helpers\VarDumper;
  * @property string $name
  * @property string $surname
  * @property string $birthdate
+ * @property string $auth_key
  * @property string|null $street_name
  * @property string|null $number
  * @property string|null $postcode
@@ -23,7 +26,7 @@ use yii\helpers\VarDumper;
  *
  * @property Post[] $posts
  */
-class User extends \yii\db\ActiveRecord
+class User extends ActiveRecord implements IdentityInterface
 {
 
     public $password_repeat;
@@ -85,6 +88,53 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
+     * Finds an identity by the given ID.
+     *
+     * @param string|int $id the ID to be looked for
+     * @return IdentityInterface|null the identity object that matches the given ID.
+     */
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
+
+    /**
+     * Finds an identity by the given token.
+     *
+     * @param string $token the token to be looked for
+     * @return IdentityInterface|null the identity object that matches the given token.
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return static::findOne(['access_token' => $token]);
+    }
+
+    /**
+     * @return int|string current user ID
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string|null current user auth key
+     */
+    public function getAuthKey()
+    {
+        return $this->auth_key;
+    }
+
+    /**
+     * @param string $authKey
+     * @return bool|null if auth key is valid for current user
+     */
+    public function validateAuthKey($authKey)
+    {
+        return $this->getAuthKey() === $authKey;
+    }
+
+    /**
      * Gets query for [[Posts]].
      *
      * @return \yii\db\ActiveQuery
@@ -135,6 +185,11 @@ class User extends \yii\db\ActiveRecord
             $this->addError($attribute, 
             'The password should be a minimum of 8 characters and must contain at least one upper case letter, one lower case letter, a number and a special character (!+-_@%$#?)');
         }
+    }
+
+    public function isPasswordCorrect($password)
+    {
+        return $this->password === md5($password);
     }
 
     public function validatePostcode($attribute)
@@ -233,6 +288,15 @@ class User extends \yii\db\ActiveRecord
                 ->asDatetime($this->birthdate, "php:Y-m-d");
         }
 
+        if ($this->isNewRecord) {
+            $this->auth_key = Yii::$app->security->generateRandomString();
+        }
+
         return parent::beforeSave($insert);
+    }
+
+    public static function findByUsername($username)
+    {
+        return User::findOne(['username' => $username]);
     }
 }

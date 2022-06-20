@@ -18,6 +18,7 @@ class m220613_100356_create_user_table extends Migration
             'surname' => $this->string(255)->notNull(),
             'username' => $this->string(255)->notNull()->unique(),
             'password' => $this->string(255)->notNull(),
+            'auth_key' => $this->string(255)->notNull(),
             'birthdate' => $this->date()->notNull(),
             'street_name' => $this->string(255),
             'number' => $this->string(10),
