@@ -8,6 +8,7 @@ use app\models\Post;
 use yii\helpers\FileHelper;
 use app\models\File;
 use yii\filters\AccessControl;
+use yii\data\Pagination;
 
 class PostController extends \yii\web\Controller
 {
@@ -77,9 +78,22 @@ class PostController extends \yii\web\Controller
         return $this->render('edit');
     }
 
-    public function actionIndex()
+    public function actionView()
     {
-        return $this->render('index');
+        $query = Post::find()->where(['user_id' => Yii::$app->user->id]);
+        $pagination = new Pagination([
+            'defaultPageSize' => 12,
+            'totalCount' => $query->count()
+        ]);
+        $posts = $query->orderBy('create_at DESC')
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+
+        return $this->render('view', [
+            'posts' => $posts,
+            'pagination' => $pagination
+        ]);
     }
 
 }

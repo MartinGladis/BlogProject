@@ -39,17 +39,23 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            
         ],
     ]);
-    
+
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav'],
+        'items' => !Yii::$app->user->isGuest ? [
+            ['label' => 'New Post', 'url' => ['/post/create']],
+            ['label' => 'My Posts', 'url' => ['/post/view']]
+        ] : []
+    ]);    
 
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav ml-auto'],
-        'items' => Yii::$app->user->isGuest ? ([
+        'items' => Yii::$app->user->isGuest ? [
             ['label' => 'Login', 'url' => ['/user/login']],
             ['label' => 'Register', 'url' => ['/user/register']]
-        ]) : ([
+        ] : [
             '<li>'
             . Html::beginForm(['/user/logout'], 'post', ['class' => 'form-inline'])
             . Html::submitButton(
@@ -58,7 +64,7 @@ AppAsset::register($this);
             )
             . Html::endForm()
             . '</li>'
-        ])
+        ]
     ]);
     NavBar::end();
     ?>

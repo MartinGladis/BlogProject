@@ -6,6 +6,8 @@ use Yii;
 use yii\web\Controller;
 use yii\web\Response;
 use app\models\ContactForm;
+use app\models\Post;
+use yii\data\Pagination;
 
 class SiteController extends Controller
 {
@@ -32,7 +34,20 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $query = Post::find();
+        $pagination = new Pagination([
+            'defaultPageSize' => 12,
+            'totalCount' => $query->count()
+        ]);
+        $posts = $query->orderBy('create_at DESC')
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+
+        return $this->render('index', [
+            'posts' => $posts,
+            'pagination' => $pagination
+        ]);
     }
 
     /**
