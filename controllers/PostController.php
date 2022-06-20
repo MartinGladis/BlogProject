@@ -7,9 +7,30 @@ use yii\web\UploadedFile;
 use app\models\Post;
 use yii\helpers\FileHelper;
 use app\models\File;
+use yii\filters\AccessControl;
 
 class PostController extends \yii\web\Controller
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['create', 'edit', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['create', 'edit', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function actionCreate()
     {
         $post = new Post();

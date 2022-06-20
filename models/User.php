@@ -149,13 +149,14 @@ class User extends ActiveRecord implements IdentityInterface
         $username = $this->username;
 
         $regex = '/\s+/';
-        if (!preg_match($regex, $username)) {
-            $regex = '/[a-zA-z\d]{6,}/';
-            if (!preg_match($regex, $username)) {
-                $this->addError($attribute, "Username should contain only uppercase and lowercase letters and be at least 6 characters long");
-            }
-        } else {
+        if (preg_match($regex, $username)) {
             $this->addError($attribute, "Username shouldn't have white spaces");
+            return;
+        }
+
+        $regex = '/[a-zA-z\d]{6,}/';
+        if (!preg_match($regex, $username)) {
+            $this->addError($attribute, "Username should contain only uppercase and lowercase letters and be at least 6 characters long");
         }
     }
 
@@ -164,16 +165,16 @@ class User extends ActiveRecord implements IdentityInterface
         $date = $this->birthdate;
         $regex = '/[\d]{2}.[\d]{2}.[\d]{4}/';
 
-        if (preg_match($regex, $date)) {
-            $day = intval(substr($date, 0, 2));
-            $month = intval(substr($date, 3, 2));
-            $year = intval(substr($date, 6));
-            if (!checkdate($month, $day, $year)) {
-                $this->addError($attribute, "This date don't exist");
-            }
-
-        } else {
+        if (!preg_match($regex, $date)) {
             $this->addError($attribute, 'Date should have format "DD.MM.YYYY"');
+            return;
+        }
+
+        $day = intval(substr($date, 0, 2));
+        $month = intval(substr($date, 3, 2));
+        $year = intval(substr($date, 6));
+        if (!checkdate($month, $day, $year)) {
+            $this->addError($attribute, "This date don't exist");
         }
     }
 
@@ -182,8 +183,11 @@ class User extends ActiveRecord implements IdentityInterface
         $regex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!+-_@%$#?])(?=.*\d)[a-zA-Z\d!+-_@%$#?]{8,}$/';
 
         if (!preg_match($regex, $this->password)) {
-            $this->addError($attribute, 
-            'The password should be a minimum of 8 characters and must contain at least one upper case letter, one lower case letter, a number and a special character (!+-_@%$#?)');
+            $this->addError($attribute, <<<EOD
+            The password should be a minimum of 8 characters 
+            and must contain at least one upper case letter, one lower case letter, 
+            a number and a special character (!+-_@%$#?)
+            EOD);
         }
     }
 
@@ -206,28 +210,27 @@ class User extends ActiveRecord implements IdentityInterface
         $pesel = $this->pesel;
         $regex = '/[\d]{11}/';
 
-        if (preg_match($regex, $pesel)) {
-
-            $peselWeight = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3];
-            $peselDigits = array_map('intval', str_split($pesel));
-            $digitsWeight = [];
-
-            for ($i=0; $i < 10; $i++) { 
-                $digitsWeight[] = $peselDigits[$i] * $peselWeight[$i];
-                $digitsWeight[$i] %= 10;
-            }
-
-            $controlNumber = array_sum($digitsWeight);
-            $controlNumberLastDigit = $controlNumber % 10;
-
-            $controlDigit = 10 - $controlNumberLastDigit;
-
-            if ($peselDigits[10] != $controlDigit) {
-                $this->addError($attribute, 'PESEL is incorrect');
-            }
-            
-        } else {
+        if (!preg_match($regex, $pesel)) {
             $this->addError($attribute, "PESEL must have only digit and have 11 characters");
+            return;
+        }
+
+        $peselWeight = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3];
+        $peselDigits = array_map('intval', str_split($pesel));
+        $digitsWeight = [];
+
+        for ($i=0; $i < 10; $i++) { 
+            $digitsWeight[] = $peselDigits[$i] * $peselWeight[$i];
+            $digitsWeight[$i] %= 10;
+        }
+
+        $controlNumber = array_sum($digitsWeight);
+        $controlNumberLastDigit = $controlNumber % 10;
+
+        $controlDigit = 10 - $controlNumberLastDigit;
+
+        if ($peselDigits[10] != $controlDigit) {
+            $this->addError($attribute, 'PESEL is incorrect');
         }
     }
 
