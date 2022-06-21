@@ -96,4 +96,12 @@ class PostController extends \yii\web\Controller
         ]);
     }
 
+    public function actionDetails($id)
+    {
+        $post = Post::findOne($id);
+        return $this->render('details', [
+            'post' => $post
+        ]);
+    }
+
 }
