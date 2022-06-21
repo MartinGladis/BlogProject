@@ -20,6 +20,8 @@ use Yii;
 class Post extends \yii\db\ActiveRecord
 {
 
+    const FILESIZE_LIMIT = 1.5 * 1024 ** 2;
+
     public $attachmentFiles;
 
     /**
@@ -42,6 +44,7 @@ class Post extends \yii\db\ActiveRecord
             [['create_at', 'update_at'], 'safe'],
             [['topic'], 'string', 'max' => 255],
             ['attachmentFiles', 'file', 'maxFiles' => 10],
+            ['attachmentFiles', 'validateFilesize'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -75,6 +78,17 @@ class Post extends \yii\db\ActiveRecord
     public function getFiles()
     {
         return $this->hasMany(File::class, ['post_id' => 'id']);
+    }
+
+    public function validateFilesize($attribite)
+    {
+        foreach ($this->attachmentFiles as $attachmentFile) {
+            $filesize = filesize($attachmentFile->tempName);
+            if ($filesize > self::FILESIZE_LIMIT) {
+                $this->addError($attribite, 'File "' . $attachmentFile->name . '" is greater than 1,5MB');
+                return;
+            }
+        }
     }
 
     public function beforeSave($insert)

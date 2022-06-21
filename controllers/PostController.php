@@ -44,18 +44,14 @@ class PostController extends \yii\web\Controller
                 $post->save();
                 $post->refresh();
 
-                $path = 'uploads/' . $post->id . '/';
-                FileHelper::createDirectory($path);
-
                 foreach ($post->attachmentFiles as $attachmentFile) {
                     $file = new File();
 
                     $filename = $attachmentFile->baseName . '.' . $attachmentFile->extension;
-                    $attachmentFile->saveAs($path . $filename);
                     
                     $file->filename = $filename;
                     $file->post_id = $post->id;
-                    $file->path = $path;
+                    $file->blob = file_get_contents($attachmentFile->tempName);
                     $file->mime_type = FileHelper::getMimeType($attachmentFile);
                     $file->save();
                 }

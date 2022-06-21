@@ -16,7 +16,7 @@ class m220617_102258_create_file_table extends Migration
             'id' => $this->primaryKey(),
             'post_id' => $this->integer(),
             'filename' => $this->string(255)->notNull(),
-            'path' => $this->string(255)->notNull(),
+            'blob' => $this->binary()->notNull(),
             'mime_type' => $this->string()
         ]);
 
