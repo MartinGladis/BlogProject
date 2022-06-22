@@ -1,12 +1,14 @@
 <?php
 
 use yii\db\Migration;
+use app\models\File;
 
 /**
  * Handles the creation of table `{{%file}}`.
  */
 class m220617_102258_create_file_table extends Migration
 {
+    
     /**
      * {@inheritdoc}
      */
@@ -16,7 +18,7 @@ class m220617_102258_create_file_table extends Migration
             'id' => $this->primaryKey(),
             'post_id' => $this->integer(),
             'filename' => $this->string(255)->notNull(),
-            'blob' => $this->binary()->notNull(),
+            'blob' => 'MEDIUMBLOB NOT NULL',
             'mime_type' => $this->string()
         ]);
 
