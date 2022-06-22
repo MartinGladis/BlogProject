@@ -16,6 +16,9 @@ use Yii;
  */
 class File extends \yii\db\ActiveRecord
 {
+
+    const FILESIZE_LIMIT = 1.5 * 1024 ** 2;
+
     /**
      * {@inheritdoc}
      */

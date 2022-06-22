@@ -20,8 +20,6 @@ use Yii;
 class Post extends \yii\db\ActiveRecord
 {
 
-    const FILESIZE_LIMIT = 1.5 * 1024 ** 2;
-
     public $attachmentFiles;
 
     /**
@@ -84,7 +82,7 @@ class Post extends \yii\db\ActiveRecord
     {
         foreach ($this->attachmentFiles as $attachmentFile) {
             $filesize = filesize($attachmentFile->tempName);
-            if ($filesize > self::FILESIZE_LIMIT) {
+            if ($filesize > File::FILESIZE_LIMIT) {
                 $this->addError($attribite, 'File "' . $attachmentFile->name . '" is greater than 1,5MB');
                 return;
             }

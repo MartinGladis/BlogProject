@@ -15,12 +15,19 @@ $createDate = date('d.m.Y H:i', strtotime($post->create_at))
     <div class="row">
 
     <?php foreach ($post->files as $file) : ?>
+        <?php $base64 = base64_encode($file->blob); ?>
 
-        <div class="col-8 col-md-10 mb-2">
-            <?=$file->filename ?>
+        <div class="col-8 col-md-10 my-2">
+            <?php if (str_starts_with($file->mime_type, 'image/')) : ?>
+                
+                
+                <img class="w-100" src='<?="data:$file->mime_type;base64,$base64"?>' alt="<?=$file->filename  ?>">
+            <?php else : ?>
+                <?=$file->filename ?>
+            <?php endif ?>
         </div>
-        <div class="col d-flex justify-content-center align-items-center mb-2">
-            <a href="#" class="btn btn-secondary">Pobierz</a>
+        <div class="col d-flex justify-content-center align-items-center my-2">
+            <a href="/file/download?id=<?=$file->id ?>" class="btn btn-secondary">Pobierz</a>
         </div>
 
     <?php endforeach ?>
