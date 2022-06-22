@@ -11,4 +11,11 @@ class FileController extends \yii\web\Controller
         header("Content-Disposition: attachment; filename=$file->filename");
     }
 
+    public function actionView($id)
+    {
+        $file = File::findOne($id);
+        header("Content-Type: $file->mime_type");
+        echo $file->blob;
+    }
+
 }

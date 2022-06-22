@@ -20,9 +20,9 @@ $this->title = 'Blog';
 
         <div class="col-sm-12 col-md-6 col-lg-4 p-2">
             <div class="p-3">
-                <h2 class="mb-3 h3"><?=$post->topic ?></h2>
+                <h2 class="mb-0 h3"><?=$post->topic ?></h2>
+                <p><small><i>Created: <?=date("d.m.Y H:i", strtotime($post->create_at)) ?></i></small></p>
                 <p><?=$description ?></p>
-                <p>Created date: <?=date("d.m.Y H:i", strtotime($post->create_at)) ?></p>
                 <a href="/post/details?id=<?=$post->id?>" class="btn btn-secondary btn-sm d-block">Read More</a>
             </div>
         </div>

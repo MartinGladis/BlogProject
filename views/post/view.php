@@ -14,21 +14,21 @@ $this->title = 'Blog - My Posts';
 
             <div class="col-sm-12 p-2">
                 <div class="border border-dark rounded p-3">
-                    <div class="container p-0">
+                    <div class="p-0">
                         <div class="row">
                             <div class="col-8 col-md-7 col-lg-8 col-xl-9">
                                 <h2 class="mb-3 h3 d-inline-block"><?=$post->topic ?></h2>
+                                <p>Created date: <?=date('d.m.Y', strtotime($post->create_at)) ?></p>
                             </div>
                             <div class="col">
                                 <div class="w-100 d-md-inline-flex justify-content-end">
-                                    <a href="/post/edit?id=<?=$post->id?>" class="btn btn-info d-block m-1">Edit post</a>
-                                    <a href="/post/delete?id=<?=$post->id?>" class="btn btn-danger d-block m-1">Delete post</a>
+                                    <a href="/post/edit?id=<?=$post->id?>" class="btn btn-info d-block mt-1 m-md-1">Edit post</a>
+                                    <a href="/post/delete?id=<?=$post->id?>" class="btn btn-danger d-block mt-1 m-md-1">Delete post</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p>Created date: <?=date('d.m.Y', strtotime($post->create_at)) ?></p>
-                    <a href="/post/details?id=<?=$post->id?>" class="btn btn-secondary btn-sm d-block">Read More</a>
+                    <a href="/post/details?id=<?=$post->id?>" class="btn btn-secondary btn-sm d-block mt-2 mt-md-0">Read More</a>
                 </div>
             </div>
 
