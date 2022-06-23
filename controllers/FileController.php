@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 use app\models\File;
+use yii\filters\AccessControl;
 
 class FileController extends \yii\web\Controller
 {
