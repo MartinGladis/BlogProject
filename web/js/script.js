@@ -11,3 +11,7 @@ $(".delete-file-button").on("click" , function(event) {
         })
     }
 });
+
+$(".delete-post-button").on("click", () => {
+    confirm("Are you sure")
+});

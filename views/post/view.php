@@ -23,7 +23,7 @@ $this->title = 'Blog - My Posts';
                             <div class="col">
                                 <div class="w-100 d-md-inline-flex justify-content-end">
                                     <a href="/post/edit?id=<?=$post->id?>" class="btn btn-info d-block mt-1 m-md-1">Edit post</a>
-                                    <a href="/post/delete?id=<?=$post->id?>" class="btn btn-danger d-block mt-1 m-md-1">Delete post</a>
+                                    <a href="/post/delete?id=<?=$post->id?>" class="btn btn-danger d-block mt-1 m-md-1 delete-post-button">Delete post</a>
                                 </div>
                             </div>
                         </div>

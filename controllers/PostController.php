@@ -67,7 +67,13 @@ class PostController extends \yii\web\Controller
     public function actionDelete($id)
     {
         $post = Post::findOne($id);
-        return $this->render('delete');
+
+        foreach ($post->files as $file) {
+            $file->delete();
+        }
+
+        $post->delete();
+        return $this->goHome();
     }
 
     public function actionEdit($id)
