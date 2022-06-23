@@ -27,6 +27,11 @@ class File extends \yii\db\ActiveRecord
         return 'tbl_file';
     }
 
+    public function __toString()
+    {
+        return $this->filename;
+    }
+
     /**
      * {@inheritdoc}
      */

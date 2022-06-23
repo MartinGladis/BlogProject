@@ -5,6 +5,23 @@ use app\models\File;
 
 class FileController extends \yii\web\Controller
 {
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['delete'],
+                'rules' => [
+                    [
+                        'actions' => ['delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
     public function actionDownload($id)
     {
         $file = File::findOne($id);
@@ -16,6 +33,12 @@ class FileController extends \yii\web\Controller
         $file = File::findOne($id);
         header("Content-Type: $file->mime_type");
         echo $file->blob;
+    }
+
+    public function actionDelete($id)
+    {
+        $file = File::findOne($id);
+        $file->delete();
     }
 
 }
