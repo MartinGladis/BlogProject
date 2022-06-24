@@ -78,4 +78,16 @@ class LoginForm extends Model
 
         return $this->_user;
     }
+
+    public static function afterLogin($event)
+    {
+        $identity = $event->identity;
+        $user = User::findOne($identity->id);
+        if ($identity->last_login) {
+            $session = Yii::$app->session;
+            $session->set('last_login', Yii::$app->formatter->asDatetime($identity->last_login, 'php:d.m.Y H:i'));
+        }
+        $user->last_login = gmdate('Y-m-d H:i:s');
+        $user->save(false);
+    }
 }

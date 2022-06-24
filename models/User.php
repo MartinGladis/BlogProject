@@ -282,9 +282,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function beforeSave($insert)
     {
-        if ($this->password) {
-            $this->password = md5($this->password);
-        }
 
         if ($this->birthdate) {
             $this->birthdate = Yii::$app->formatter
@@ -296,6 +293,15 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         return parent::beforeSave($insert);
+    }
+
+    public function afterValidate()
+    {
+        if ($this->password) {
+            $this->password = md5($this->password);
+        }
+
+        return parent::afterValidate();
     }
 
     public static function findByUsername($username)

@@ -82,3 +82,8 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.nav > li.last-login-element {
+    padding: 0.5rem 1rem;
+    color: rgba(0, 0, 0, 0.75)
+}

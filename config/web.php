@@ -5,6 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'timeZone' => 'Europe/Warsaw',
     'name' => 'Blog',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -23,6 +24,7 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'loginUrl' => ['user/login'],
+            'on afterLogin' => ['app\models\Loginform', 'afterLogin'],
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [

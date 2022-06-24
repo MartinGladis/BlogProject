@@ -56,7 +56,9 @@ AppAsset::register($this);
             ['label' => 'Login', 'url' => ['/user/login']],
             ['label' => 'Register', 'url' => ['/user/register']]
         ] : [
-            '<li>'
+            '<li class="last-login-element">Last Login: '
+            . Yii::$app->session->get("last_login")
+            . '</li><li>'
             . Html::beginForm(['/user/logout'], 'post', ['class' => 'form-inline'])
             . Html::submitButton(
                 'Logout (' . Yii::$app->user->identity->username . ')',
