@@ -19,10 +19,10 @@ class UserController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout'],
+                'only' => ['logout', 'change-password'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'change-password'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -72,19 +72,37 @@ class UserController extends \yii\web\Controller
     }
 
     public function actionRegister()
-{
-    $user = new User();
+    {
+        $user = new User();
+        $user->scenario = "register";
 
-    if ($user->load(Yii::$app->request->post())) {
-        if ($user->validate()) {
-            $user->save();
-            return $this->redirect('/');
-        }
+        if ($user->load(Yii::$app->request->post())) {
+            if ($user->validate()) {
+                $user->auth_key = Yii::$app->security->generateRandomString();
+                $user->save();
+                return $this->goHome();
+            }
+        };
+
+        return $this->render('register', [
+            'user' => $user,
+        ]);
     }
 
-    return $this->render('register', [
-        'user' => $user,
-    ]);
-}
+    public function actionChangePassword($id)
+    {
+        $user = User::findOne($id);
+        $user->scenario = "change-password";
 
+        if ($user->load(Yii::$app->request->post())) {
+            if ($user->validate()) {
+                $user->save();
+                return $this->goHome();
+            }
+        }
+
+        return $this->render('change-password', [
+            'user' => $user
+        ]);
+    }
 }

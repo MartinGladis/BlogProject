@@ -31,6 +31,8 @@ class User extends ActiveRecord implements IdentityInterface
 
     public $password_repeat;
 
+    public $old_password;
+
     /**
      * {@inheritdoc}
      */
@@ -45,7 +47,9 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['name', 'surname', 'username', 'password', 'password_repeat', 'birthdate', 'email'], 'required'],
+            [['name', 'surname', 'username', 'password', 'birthdate', 'email'], 'required'],
+            ['password_repeat', 'required', 'on' => ['register', 'change-password']],
+            ['old_password', 'required', 'on' => 'change-password'],
             [['birthdate', 'registered_at', 'last_login'], 'safe'],
             [['username', 'name', 'surname', 'street_name', 'email'], 'string', 'max' => 255],
             [['number'], 'string', 'max' => 10],
@@ -53,14 +57,16 @@ class User extends ActiveRecord implements IdentityInterface
             [['pesel'], 'string', 'max' => 11],
             [['username', 'email'], 'trim'],
             [['username', 'email'], 'unique'],
-            ['username', 'validateUsername'],
+            ['username', 'validateUsername', 'on' => 'register'],
             ['email', 'email'],
-            ['birthdate', 'validateDate'],
-            ['password', 'validatePassword'],
-            ['password_repeat', 'compare', 'compareAttribute' => 'password', 'message' => 'Passwords must be the same'],
-            ['postcode', 'validatePostcode'],
-            ['pesel', 'validatePesel'],
-            ['pesel', 'validatePeselDate']
+            ['birthdate', 'validateDate', 'on' => 'register'],
+            ['password', 'validatePassword', 'on' => ['register', 'change-password']],
+            ['password_repeat', 'compare', 'compareAttribute' => 'password', 'message' => 'Passwords must be the same', 'on' => ['register', 'change-password']],
+            ['old_password', 'validateOldPassword', 'on' => 'change-password'],
+            ['password', 'validateNewPassword', 'on' => 'change-password'],
+            ['postcode', 'validatePostcode', 'on' => 'register'],
+            ['pesel', 'validatePesel', 'on' => 'register'],
+            ['pesel', 'validatePeselDate', 'on' => 'register']
         ];
     }
 
@@ -76,6 +82,7 @@ class User extends ActiveRecord implements IdentityInterface
             'username' => 'Username',
             'password' => 'Password',
             'password_repeat' => 'Password Repeat',
+            'old_password' => "Old Password",
             'birthdate' => 'Birthdate',
             'street_name' => 'Street Name',
             'number' => 'Number',
@@ -280,32 +287,35 @@ class User extends ActiveRecord implements IdentityInterface
 
     }
 
-    public function beforeSave($insert)
+    public function validateOldPassword($attribute)
     {
-
-        if ($this->birthdate) {
-            $this->birthdate = Yii::$app->formatter
-                ->asDatetime($this->birthdate, "php:Y-m-d");
+        if ( md5($this->old_password) !== Yii::$app->user->identity->password ) {
+            $this->addError($attribute, 'Password must be the same as your current password');
         }
-
-        if ($this->isNewRecord) {
-            $this->auth_key = Yii::$app->security->generateRandomString();
-        }
-
-        return parent::beforeSave($insert);
     }
 
-    public function afterValidate()
+    public function validateNewPassword($attribute)
     {
-        if ($this->password) {
-            $this->password = md5($this->password);
+        if ( md5($this->password) === Yii::$app->user->identity->password ) {
+            $this->addError($attribute, 'Your new password should be different as your old password');
         }
-
-        return parent::afterValidate();
     }
 
     public static function findByUsername($username)
     {
         return User::findOne(['username' => $username]);
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($this->password && $this->password_repeat) {
+            $this->password = md5($this->password);
+        }
+
+        if ($this->birthdate) {
+            $this->birthdate = Yii::$app->formatter->asDatetime($this->birthdate, "php:Y-m-d");
+        }
+
+        return parent::beforeSave($insert);
     }
 }

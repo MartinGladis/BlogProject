@@ -88,6 +88,6 @@ class LoginForm extends Model
             $session->set('last_login', Yii::$app->formatter->asDatetime($identity->last_login, 'php:d.m.Y H:i'));
         }
         $user->last_login = gmdate('Y-m-d H:i:s');
-        $user->save(false);
+        $user->save();
     }
 }
