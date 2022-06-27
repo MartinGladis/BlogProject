@@ -57,16 +57,16 @@ class User extends ActiveRecord implements IdentityInterface
             [['pesel'], 'string', 'max' => 11],
             [['username', 'email'], 'trim'],
             [['username', 'email'], 'unique'],
-            ['username', 'validateUsername', 'on' => 'register'],
+            ['username', 'validateUsername', 'on' => ['register', 'edit']],
             ['email', 'email'],
-            ['birthdate', 'validateDate', 'on' => 'register'],
+            ['birthdate', 'validateDate', 'on' => ['register', 'edit']],
             ['password', 'validatePassword', 'on' => ['register', 'change-password']],
             ['password_repeat', 'compare', 'compareAttribute' => 'password', 'message' => 'Passwords must be the same', 'on' => ['register', 'change-password']],
             ['old_password', 'validateOldPassword', 'on' => 'change-password'],
             ['password', 'validateNewPassword', 'on' => 'change-password'],
-            ['postcode', 'validatePostcode', 'on' => 'register'],
-            ['pesel', 'validatePesel', 'on' => 'register'],
-            ['pesel', 'validatePeselDate', 'on' => 'register']
+            ['postcode', 'validatePostcode', 'on' => ['register', 'edit']],
+            ['pesel', 'validatePesel', 'on' => ['register', 'edit']],
+            ['pesel', 'validatePeselDate', 'on' => ['register', 'edit']]
         ];
     }
 

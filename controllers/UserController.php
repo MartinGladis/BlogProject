@@ -105,4 +105,21 @@ class UserController extends \yii\web\Controller
             'user' => $user
         ]);
     }
+
+    public function actionEdit($id) //PRZETESTOWAĆ!!!!
+    {
+        $user = User::findOne($id);
+        $user->scenario = "edit";
+
+        if ($user->load(Yii::$app->request->post())) {
+            if ($user->validate()) {
+                $user->save();
+                return $this->goHome();
+            }
+        }
+
+        return $this->render('edit', [
+            'user' => $user
+        ]);
+    }
 }

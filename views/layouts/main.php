@@ -49,6 +49,14 @@ AppAsset::register($this);
                     ? Yii::$app->user->identity->id 
                     : ''
                 ])
+            ], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => 'Edit User Data', 'url' => [
+                Url::to([
+                '/user/edit',
+                'id' => isset(Yii::$app->user->identity->id) 
+                    ? Yii::$app->user->identity->id 
+                    : ''
+                ])
             ], 'visible' => !Yii::$app->user->isGuest]
         ],
     ]);  
