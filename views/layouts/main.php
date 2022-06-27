@@ -39,7 +39,6 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'New Post', 'url' => ['/post/create'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => 'My Posts', 'url' => ['/post/view'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => 'Change Password', 'url' => [
