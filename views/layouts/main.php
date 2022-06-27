@@ -68,7 +68,7 @@ AppAsset::register($this);
             ['label' => 'Register', 'url' => ['/user/register']]
         ] : [
             (Yii::$app->session->get("last_login")
-                ? '<li class="last-login-element">Last Login: '
+                ? '<li class="last-login-element px-0">Last Login: '
                     . Yii::$app->session->get("last_login")
                     . '</li>' 
                 : '')

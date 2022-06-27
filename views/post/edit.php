@@ -2,15 +2,19 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\widgets\Pjax;
-use yii\grid\GridView;
 
 /** @var yii\web\View $this */
 /** @var app\models\Post $post */
 /** @var ActiveForm $form */
+
+$this->title = 'Edit Post';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<h1>Edit post</h1>
-<div class="post-create mt-4">
+
+
+<div class="post-edit">
+
+    <h1 class="mb-4">Edit post</h1>
 
     <?php $form = ActiveForm::begin(
         ['options' => ['enctype' => 'multipart/form-data']

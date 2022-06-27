@@ -4,13 +4,18 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\jui\DatePicker;
 
-/* @var $this yii\web\View */
+/** @var $this yii\web\View */
 /* @var $model app\models\User */
 /* @var $form ActiveForm */
+
+$this->title = 'Edit User Data';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<h1>Edit User Data</h1>
+
 <div class="user-edit">
+
+    <h1 class="mb-4">Edit User Data</h1>
 
     <?php $form = ActiveForm::begin(); ?>
 

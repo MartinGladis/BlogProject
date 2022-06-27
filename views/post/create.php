@@ -3,12 +3,17 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
+/** @var $this yii\web\View */
 /* @var $post app\models\Post */
 /* @var $form ActiveForm */
+
+$this->title = 'Create Post';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<h1>Add new post</h1>
-<div class="post-create mt-4">
+
+<div class="post-create">
+
+    <h1 class="mb-4">Add new post</h1>
 
     <?php $form = ActiveForm::begin(
         ['options' => ['enctype' => 'multipart/form-data']
