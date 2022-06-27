@@ -1,14 +1,28 @@
 <?php
 use yii\helpers\StringHelper;
+use yii\bootstrap4\LinkPager;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 
 $this->title = 'Blog';
 ?>
 
-<h1 class="mb-4">Posts</h1>
+<h1 class="mb-4">All Posts</h1>
+
 
 <div class="container">
+
+    <?php if ($sort == SORT_DESC) : ?>
+
+        <a href="<?= Url::to(['site/index', 'sort' => SORT_ASC]) ?>">Sort from Oldest</a>
+
+    <?php else : ?>
+
+        <a href="<?= Url::to(['site/index', 'sort' => SORT_DESC]) ?>">Sort from Newest</a>
+
+    <?php endif ?>
+
     <div class="row gx-5">
 
         <?php foreach ($posts as $post) : ?>
@@ -30,4 +44,6 @@ $this->title = 'Blog';
         <?php endforeach ?>
 
     </div>
+
+    <?= LinkPager::widget(['pagination' => $pagination]) ?>
 </div>

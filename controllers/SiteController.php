@@ -8,6 +8,7 @@ use yii\web\Response;
 use app\models\ContactForm;
 use app\models\Post;
 use yii\data\Pagination;
+use yii\data\Sort;
 
 class SiteController extends Controller
 {
@@ -32,21 +33,24 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex($sort = SORT_DESC)
     {
         $query = Post::find();
+
         $pagination = new Pagination([
             'defaultPageSize' => 12,
             'totalCount' => $query->count()
         ]);
-        $posts = $query->orderBy('create_at DESC')
+
+        $posts = $query->orderBy(['create_at' => (int) $sort])
             ->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
 
         return $this->render('index', [
             'posts' => $posts,
-            'pagination' => $pagination
+            'pagination' => $pagination,
+            'sort' => $sort
         ]);
     }
 
