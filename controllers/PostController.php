@@ -83,6 +83,7 @@ class PostController extends \yii\web\Controller
         if ($post->load(Yii::$app->request->post())) {
 
             $post->attachmentFiles = UploadedFile::getInstances($post, 'attachmentFiles');
+            $post->update_at = gmdate('Y-m-d H:i:s');
 
             if ($post->validate()) {
                 $post->save();
