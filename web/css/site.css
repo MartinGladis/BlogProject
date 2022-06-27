@@ -87,3 +87,8 @@ a.desc:after {
     padding: 0.5rem 1rem;
     color: rgba(0, 0, 0, 0.75)
 }
+
+ul.pagination {
+    justify-content: center;
+    margin-top: 1.5rem;
+}
