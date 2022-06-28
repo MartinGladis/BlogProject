@@ -4,11 +4,9 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\web\Response;
-use app\models\ContactForm;
 use app\models\Post;
 use yii\data\Pagination;
-use yii\data\Sort;
+
 
 class SiteController extends Controller
 {
