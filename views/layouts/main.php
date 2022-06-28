@@ -39,46 +39,39 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'New Post', 'url' => ['/post/create'], 'visible' => !Yii::$app->user->isGuest],
-            ['label' => 'My Posts', 'url' => ['/post/view'], 'visible' => !Yii::$app->user->isGuest],
-            ['label' => 'Change Password', 'url' => [
-                Url::to([
-                '/user/change-password',
-                'id' => isset(Yii::$app->user->identity->id) 
-                    ? Yii::$app->user->identity->id 
-                    : ''
-                ])
-            ], 'visible' => !Yii::$app->user->isGuest],
-            ['label' => 'Edit User Data', 'url' => [
-                Url::to([
-                '/user/edit',
-                'id' => isset(Yii::$app->user->identity->id) 
-                    ? Yii::$app->user->identity->id 
-                    : ''
-                ])
-            ], 'visible' => !Yii::$app->user->isGuest]
+            ['label' => 'New Post', 'url' => ['/post/create']],
         ],
     ]);  
 
     echo Nav::widget([
+        'encodeLabels' => false,
         'options' => ['class' => 'navbar-nav ml-auto'],
         'items' => Yii::$app->user->isGuest ? [
             ['label' => 'Login', 'url' => ['/user/login']],
             ['label' => 'Register', 'url' => ['/user/register']]
         ] : [
             (Yii::$app->session->get("last_login")
-                ? '<li class="last-login-element px-0">Last Login: '
+                ? '<li class="last-login-element px-0 mr-2">Last Login: '
                     . Yii::$app->session->get("last_login")
                     . '</li>' 
-                : '')
-            .'<li>'
-            . Html::beginForm(['/user/logout'], 'post', ['class' => 'form-inline'])
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>'
+                : ''),
+            ['label' => Html::tag('i', '', ['class' => 'fas fa-user-alt']), 'dropdownOptions' => ['class' => 'dropdown-menu-right'], 'items' => [
+                ['label' => 'Change Password', 'url' => [
+                    Url::to(['/user/change-password', 'id' => isset(Yii::$app->user->identity->id) 
+                        ? Yii::$app->user->identity->id : ''])
+                    ], 
+                ],
+                ['label' => 'Edit User Data', 'url' => [
+                    Url::to([
+                    '/user/edit',
+                    'id' => isset(Yii::$app->user->identity->id) 
+                        ? Yii::$app->user->identity->id 
+                        : ''
+                    ])
+                ]],
+                ['label' => 'My Posts', 'url' => ['/post/view']],
+                ['label' => 'Logout', 'url' => ['/user/logout'], 'linkOptions' => ['data-method' => 'post']]
+            ]]        
         ]
     ]);
     NavBar::end();
