@@ -55,6 +55,7 @@ class PostController extends \yii\web\Controller
                     $file->mime_type = FileHelper::getMimeType($attachmentFile);
                     $file->save();
                 }
+                Yii::$app->getSession()->setFlash('success', 'Post created succesfully');
                 return $this->redirect('/');
             }
         }
@@ -73,6 +74,7 @@ class PostController extends \yii\web\Controller
         }
 
         $post->delete();
+        Yii::$app->getSession()->setFlash('success', 'Post removed succesfully');
         return $this->goHome();
     }
 
@@ -99,6 +101,8 @@ class PostController extends \yii\web\Controller
                     $file->mime_type = FileHelper::getMimeType($attachmentFile);
                     $file->save();
                 }
+
+                Yii::$app->getSession()->setFlash('success', 'Post edited succesfully');
                 return $this->refresh();
             }
         }

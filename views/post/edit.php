@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         
         <?php if ($post->files) : ?>
 
-            <label>Attachment files:</label>
+            <label id="attachmentLabel">Attachment files:</label>
 
             <div class="container mb-3">
 

@@ -80,6 +80,7 @@ class UserController extends \yii\web\Controller
             if ($user->validate()) {
                 $user->auth_key = Yii::$app->security->generateRandomString();
                 $user->save();
+                Yii::$app->getSession()->setFlash('success', 'Registered successfully');
                 return $this->goHome();
             }
         };
@@ -97,6 +98,7 @@ class UserController extends \yii\web\Controller
         if ($user->load(Yii::$app->request->post())) {
             if ($user->validate()) {
                 $user->save();
+                Yii::$app->getSession()->setFlash('success', 'Password changed successfully');
                 return $this->goHome();
             }
         }
@@ -114,6 +116,7 @@ class UserController extends \yii\web\Controller
         if ($user->load(Yii::$app->request->post())) {
             if ($user->validate()) {
                 $user->save();
+                Yii::$app->getSession()->setFlash('success', 'User data edited succesfully');
                 return $this->goHome();
             }
         }

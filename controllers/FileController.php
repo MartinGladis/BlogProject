@@ -3,6 +3,7 @@
 namespace app\controllers;
 use app\models\File;
 use yii\filters\AccessControl;
+use Yii;
 
 class FileController extends \yii\web\Controller
 {
@@ -40,6 +41,12 @@ class FileController extends \yii\web\Controller
     {
         $file = File::findOne($id);
         $file->delete();
+        $key = 'success';
+        Yii::$app->getSession()->setFlash($key, 'File removed succesfully');
+
+        return $this->renderAjax('../_flash.php', [
+            'key' => $key
+        ]);
     }
 
 }

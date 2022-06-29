@@ -7,9 +7,12 @@ $("document").ready(() => {
                 data: {
                     id: event.target.id,
                 },
-            }).done(function() {
-                $(event.target).parent().parent().remove();
+            }).done(function(response) {
+                fileElement = $(event.target).parent().parent();
+                fileElement.remove();
+                $('label#attachmentLabel').before(response);
             })
+
         }
     });
 
