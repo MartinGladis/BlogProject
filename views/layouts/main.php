@@ -9,7 +9,6 @@ use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
-use yii\helpers\Url;
 
 AppAsset::register($this);
 ?>
@@ -28,6 +27,7 @@ AppAsset::register($this);
 
 <header>
     <?php
+
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
@@ -41,7 +41,7 @@ AppAsset::register($this);
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'New Post', 'url' => ['/post/create']],
         ],
-    ]);  
+    ]);
 
     echo Nav::widget([
         'encodeLabels' => false,
@@ -50,26 +50,13 @@ AppAsset::register($this);
             ['label' => 'Login', 'url' => ['/user/login']],
             ['label' => 'Register', 'url' => ['/user/register']]
         ] : [
-            (Yii::$app->session->get("last_login")
-                ? '<li class="last-login-element px-0 mr-2">Last Login: '
-                    . Yii::$app->session->get("last_login")
-                    . '</li>' 
-                : ''),
-            ['label' => Html::tag('i', '', ['class' => 'fas fa-user-alt']), 'dropdownOptions' => ['class' => 'dropdown-menu-right'], 'items' => [
-                ['label' => 'Change Password', 'url' => [
-                    Url::to(['/user/change-password', 'id' => isset(Yii::$app->user->identity->id) 
-                        ? Yii::$app->user->identity->id : ''])
-                    ], 
-                ],
-                ['label' => 'Edit User Data', 'url' => [
-                    Url::to([
-                    '/user/edit',
-                    'id' => isset(Yii::$app->user->identity->id) 
-                        ? Yii::$app->user->identity->id 
-                        : ''
-                    ])
-                ]],
+            ['label' => Html::tag('i', '', ['class' => 'fas fa-user-alt d-none d-md-inline']) . Html::tag('span', 'Hello ' . Yii::$app->user->identity->username, ['class' => 'd-inline d-md-none']),
+            'dropdownOptions' => ['class' => 'dropdown-menu-right'], 'items' => [
+                ['label' => 'Change Password', 'url' => ['/user/change-password']],
+                ['label' => 'Show User Data', 'url' => ['/user/show']],
+                ['label' => 'Edit User Data', 'url' => ['/user/edit']],
                 ['label' => 'My Posts', 'url' => ['/post/view']],
+                '<div class="dropdown-divider"></div>',
                 ['label' => 'Logout', 'url' => ['/user/logout'], 'linkOptions' => ['data-method' => 'post']]
             ]]        
         ]

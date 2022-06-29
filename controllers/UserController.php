@@ -19,10 +19,10 @@ class UserController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'change-password'],
+                'only' => ['logout', 'change-password', 'edit', 'show'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'change-password'],
+                        'actions' => ['logout', 'change-password', 'edit', 'show'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -89,9 +89,9 @@ class UserController extends \yii\web\Controller
         ]);
     }
 
-    public function actionChangePassword($id)
+    public function actionChangePassword()
     {
-        $user = User::findOne($id);
+        $user = User::findOne(Yii::$app->user->identity->id);
         $user->scenario = "change-password";
 
         if ($user->load(Yii::$app->request->post())) {
@@ -106,9 +106,9 @@ class UserController extends \yii\web\Controller
         ]);
     }
 
-    public function actionEdit($id) //PRZETESTOWAĆ!!!!
+    public function actionEdit()
     {
-        $user = User::findOne($id);
+        $user = User::findOne(Yii::$app->user->identity->id);
         $user->scenario = "edit";
 
         if ($user->load(Yii::$app->request->post())) {
@@ -119,6 +119,15 @@ class UserController extends \yii\web\Controller
         }
 
         return $this->render('edit', [
+            'user' => $user
+        ]);
+    }
+
+    public function actionShow()
+    {
+        $user = User::findOne(Yii::$app->user->identity->id);
+
+        return $this->render('show', [
             'user' => $user
         ]);
     }
