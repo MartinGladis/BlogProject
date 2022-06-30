@@ -17,7 +17,7 @@ class m220613_102708_create_post_table extends Migration
             'topic' => $this->string(255)->notNull(),
             'description' => $this->text()->notNull(),
             'user_id' => $this->integer(),
-            'create_at' => $this->timestamp()->notNull(),
+            'create_at' => $this->datetime()->notNull(),
             'update_at' => $this->datetime()
         ]);
 
